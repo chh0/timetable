@@ -1,53 +1,41 @@
 <script setup>
 
-import { ref } from 'vue'
-const data = ref([
-    {
-        id: '2022-9-23-0-0-0',
-        name:'test',
-        color:'#cc0ccc',
-        duration:[['2022-9-23-0-0-0', '2022-9-24-0-0-0']],
-        note:'this is just a test'
-    },
-    {
-        id: '2023-3-5-18-0-0',
-        name:'test2',
-        color:'#cc00cc',
-        duration:[['2023-3-3-18-0-0', '2023-3-18-19-0-0']],
-        note:'this is just a test2'
-    },
-    {
-        id: '2023-3-5-16-0-0',
-        name:'test3',
-        color:'#cc00cc',
-        duration:[
-            ['2023-3-5-18-0-0', '2023-3-5-19-0-0'],
-            ['2023-3-6-2-0-0', '2023-3-6-8-0-0']
-        ],
-        note:'this is just a test3'
-    }
-]);
+// const GetThisWeek = (date) => { 
+//     return [
+//         new Date(new Date().setDate(date.getDate() - date.getDay())),
+//         new Date(new Date().setDate(date.getDate() - date.getDay() + 1)),
+//         new Date(new Date().setDate(date.getDate() - date.getDay() + 2)),
+//         new Date(new Date().setDate(date.getDate() - date.getDay() + 3)),
+//         new Date(new Date().setDate(date.getDate() - date.getDay() + 4)),
+//         new Date(new Date().setDate(date.getDate() - date.getDay() + 5)),
+//         new Date(new Date().setDate(date.getDate() - date.getDay() + 6))
+//     ]
+//  }
+
 const GetThisWeek = (date) => { 
-    return [
-        new Date(new Date().setDate(date.getDate() - date.getDay())),
-        new Date(new Date().setDate(date.getDate() - date.getDay() + 1)),
-        new Date(new Date().setDate(date.getDate() - date.getDay() + 2)),
-        new Date(new Date().setDate(date.getDate() - date.getDay() + 3)),
-        new Date(new Date().setDate(date.getDate() - date.getDay() + 4)),
-        new Date(new Date().setDate(date.getDate() - date.getDay() + 5)),
-        new Date(new Date().setDate(date.getDate() - date.getDay() + 6))
-    ]
- }
+    let res = []
+    for ( let i = 0 ; i < 7 ; i++ ) {
+        res.push(new Date( date.getFullYear(), date.getMonth(), date.getDate() + i))
+    }
+    // for ( let i = 0 ; i < 7 ; i++ ) { res.push(new Date(new Date().setDate(date.getDate() + i))) }
+    return res
+}
 
 const GetHalfMonth = (date) => { 
     let res = []
-    for ( let i = 0 ; i < 15 ; i++ ) { res.push(new Date(new Date().setDate(date.getDate() + i))) }
+    for ( let i = 0 ; i < 15 ; i++ ) {
+        res.push(new Date( date.getFullYear(), date.getMonth(), date.getDate() + i))
+    }
+    // for ( let i = 0 ; i < 15 ; i++ ) { res.push(new Date(new Date().setDate(date.getDate() + i))) }
     return res
  }
 
 const GetMonth = (date) => { 
     let res = []
-    for ( let i = 0 ; i < 30 ; i++ ) { res.push(new Date(new Date().setDate(date.getDate() + i))) }
+    for ( let i = 0 ; i < 30 ; i++ ) {
+        res.push(new Date( date.getFullYear(), date.getMonth(), date.getDate() + i))
+    }
+    // for ( let i = 0 ; i < 30 ; i++ ) { res.push(new Date(new Date().setDate(date.getDate() + i))) }
     return res
  }
 
@@ -75,7 +63,10 @@ function GetMonthDays(date){
 
 const GetHalfYear = (date) => { 
     let res = []
-    for ( let i = 0 ; i < 180 ; i++ ) { res.push(new Date(new Date().setDate(date.getDate() + i))) }
+    for ( let i = 0 ; i < 180 ; i++ ) {
+        res.push(new Date( date.getFullYear(), date.getMonth(), date.getDate() + i))
+    }
+    // for ( let i = 0 ; i < 180 ; i++ ) { res.push(new Date(new Date().setDate(date.getDate() + i))) }
     return res
  }
 
@@ -103,7 +94,7 @@ const TimeStrToDate = (str) => {
 
 }
 
-const CalcRailItemPos = ( type, start_date, event_obj ) => {
+const CalcRailItemPosAndColor = ( type, start_date, event_obj ) => {
     let res = []
     let duration = event_obj.duration
     let one_day = 86400000
@@ -142,15 +133,36 @@ const CalcRailItemPos = ( type, start_date, event_obj ) => {
         //     [start_date.getMonth(), start_date.getDate(), start_date.getHours()]])
 
         if ( left <= 0 && right <= 0 ) {}
-        else if ( left <= 0 && right > 0 && right <= 100 ) { res.push([0, right]) }
-        else if ( left <= 0 && right > 100 ) { res.push([0, 100]) }
-        else if ( left > 0 && right <= 100 ) { res.push([left, length]) }
-        else if ( left > 0 && left <= 100 && right > 100 ) { res.push([left, 100-left]) }
+        else if ( left <= 0 && right > 0 && right <= 100 ) { res.push([0, right, event_obj.state.color]) }
+        else if ( left <= 0 && right > 100 ) { res.push([0, 100, event_obj.state.color]) }
+        else if ( left > 0 && right <= 100 ) { res.push([left, length, event_obj.state.color]) }
+        else if ( left > 0 && left <= 100 && right > 100 ) { res.push([left, 100-left, event_obj.state.color]) }
         else if ( left > 100 ) {}
         else { alert(" error in data ![2] ") }
     } 
 
     return res
+}
+
+
+const IsWeekend = (date) => {
+    if ( date.getDay() === 0 || date.getDay() === 6 ) return 1
+    return 0
+}
+
+const setDayItemColor = (date) => {
+    if ( IsWeekend(date) === 1 ) return '#d0d0d0'
+    return '#dddddd'
+}
+
+const setHourItemColor = (hour) => {
+    if ( hour < 8 || hour > 18) return '#d0d0d0'
+    return '#dddddd'
+}
+
+const setMonthItemColor = (arr) => {
+    if (arr[0] % 2) return '#d0d0d0'
+    return '#dddddd'
 }
 
 </script>
@@ -165,20 +177,23 @@ const CalcRailItemPos = ( type, start_date, event_obj ) => {
          :style="{'padding-top': (this.$store.state.TaskHeight - 1) / 2 + 'em'}">
         <div class="TimeTable-Head-Content" v-if="this.$store.state.ViewLength === '日'">
             <div v-for="i in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]"
-                  class="TimeTable-HeadItem TimeTable-Head-DateItem">
+                  class="TimeTable-HeadItem TimeTable-Head-DateItem"
+                  :style="{'background-color':setHourItemColor(i)}">
                 {{ i }}
                 </div>
         </div>
         <div class="TimeTable-Head-Content" v-else-if="this.$store.state.ViewLength === '周'">
             <div v-for="i in GetThisWeek(this.$store.state.StartDate)"
-                  class="TimeTable-HeadItem TimeTable-Head-WeekItem">
+                  class="TimeTable-HeadItem TimeTable-Head-WeekItem"
+                  :style="{'background-color':setDayItemColor(i)}">
                   {{ i.getMonth()+1 }}-{{ i.getDate() }}
                 </div>
         </div>
         <div class="TimeTable-Head-Content" v-else-if="this.$store.state.ViewLength === '半月'">
             <!-- {{ GetHalfMonth(this.$store.state.StartDate) }} -->
             <div v-for="i in GetHalfMonth(this.$store.state.StartDate)"
-                  class="TimeTable-HeadItem TimeTable-Head-HelfMonthItem">
+                  class="TimeTable-HeadItem TimeTable-Head-HelfMonthItem"
+                  :style="{'background-color':setDayItemColor(i)}">
                   {{ i.getMonth()+1 }}-{{ i.getDate() }}
                 </div>
         </div>
@@ -186,7 +201,8 @@ const CalcRailItemPos = ( type, start_date, event_obj ) => {
             <!-- {{ GetMonthDays(this.$store.state.StartDate) }} -->
             <!-- :style="{'width':'calc(100% / ' + (GetMonthDays(this.$store.state.StartDate)) + ' - 1px)'}" -->
             <div v-for="i in GetMonth(this.$store.state.StartDate)"
-                  class="TimeTable-HeadItem TimeTable-Head-MonthItem">
+                  class="TimeTable-HeadItem TimeTable-Head-MonthItem"
+                  :style="{'background-color':setDayItemColor(i)}">
                   {{ i.getDate() }}
                 </div>
         </div>
@@ -194,16 +210,21 @@ const CalcRailItemPos = ( type, start_date, event_obj ) => {
             <!-- {{ GetHalfYearMonthList(this.$store.state.StartDate) }} -->
             <div v-for="i in GetHalfYearMonthList(this.$store.state.StartDate)"
                   class="TimeTable-HeadItem TimeTable-Head-HalfYearItem"
-                  :style="{width:'calc(100% *' + i[1]/180 + ' - 1px )'}">
+                  :style="{
+                    'width':'calc(100% *' + i[1]/180 + ' - 1px )',
+                    'background-color':setMonthItemColor(i)
+                    }">
                   {{ i[2] }}-{{ i[0] }}
                 </div>
         </div>
     </div>
+
+
     <div class="TimeTable-Rails"
          :style="{
             'top':'calc(' + (this.$store.state.TaskHeight*1.5-0.5) + 'em + 1px)',
             }">
-        <div v-for="item in data"
+        <div v-for="item in this.$store.state.SortedData"
              class="TimeTable-Rails-Rail"
              :style="{
                 'height': this.$store.state.TaskHeight + 'em',
@@ -212,11 +233,12 @@ const CalcRailItemPos = ( type, start_date, event_obj ) => {
             <!-- {{ item.duration }} -->
             <!-- {{ this.$store.state.StartDate.getMonth() }} -->
             <div class="TimeTable-Rails-Rail-Item" 
-                 v-for="item2 in CalcRailItemPos(this.$store.state.ViewLength, this.$store.state.StartDate, item)"
+                 v-for="item2 in CalcRailItemPosAndColor(this.$store.state.ViewLength, this.$store.state.StartDate, item)"
                  :style="{
                     'left':item2[0]+'%',
                     'width':item2[1]+'%',
-                    'height':this.$store.state.TaskHeight+'em'
+                    'height':this.$store.state.TaskHeight+'em',
+                    'background-color':item2[2]
                  }">
             </div>
         </div>
@@ -231,6 +253,9 @@ const CalcRailItemPos = ( type, start_date, event_obj ) => {
     position: fixed;
     top: 3em;
     height: 100%;
+    /* text-overflow: ellipsis; */
+    /* overflow: hidden; */
+    white-space:nowrap
 }
 
 .TimeTable-Head {
@@ -253,7 +278,7 @@ const CalcRailItemPos = ( type, start_date, event_obj ) => {
 .TimeTable-HeadItem {
     display: inline-block;
     height: 100%;
-    border-right: solid 1px #cccccc;
+    border-right: solid 1px #bbbbbb;
     text-align: center;
     
 }
@@ -278,13 +303,12 @@ const CalcRailItemPos = ( type, start_date, event_obj ) => {
 } */
 
 .TimeTable-Rails-Rail {
-    border-bottom: solid 1px #cccccc;
+    border-bottom: solid 1px #bbbbbb;
 }
 
 .TimeTable-Rails-Rail-Item {
     display: inline-block;
     position: absolute;
-    background-color: blue;
 }
 
 </style>

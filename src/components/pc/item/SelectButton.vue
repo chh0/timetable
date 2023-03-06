@@ -66,7 +66,7 @@ export default {
     text-align: center;
     user-select: none;
     border-radius: 0.5em;
-    background-color: #7777ff;
+    background-color: #434978;
     color: #ffffff;
 }
 

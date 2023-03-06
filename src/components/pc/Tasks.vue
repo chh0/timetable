@@ -1,24 +1,5 @@
 <script setup>
 
-import { ref } from 'vue'
-
-const data = ref([
-    {
-        id: '2022-9-23-0-0-0',
-        name:'test',
-        color:'#cc0ccc',
-        duration:[['2022-9-23-0-0-0', '2022-9-24-0-0-0']],
-        note:'this is just a test'
-    },
-    {
-        id: '2022-9-24-0-0-0',
-        name:'test2',
-        color:'#cc00cc',
-        duration:[['2022-9-24-0-0-0', '2022-9-25-0-0-0']],
-        note:'this is just a test2'
-    }
-]);
-
 </script>
 
 <template>
@@ -29,7 +10,7 @@ const data = ref([
         'padding-top': (this.$store.state.TaskHeight - 1) / 2 + 'em' }">
         <div> 任务列表 </div>
     </div>
-    <div v-for="item of data" 
+    <div v-for="item of this.$store.state.SortedData" 
         class="Tasks-Item" 
         :style="{'height':this.$store.state.TaskHeight + 'em',
          }">

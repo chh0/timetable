@@ -3,6 +3,37 @@
 import SelectButton from './item/SelectButton.vue';
 import MulSelectButton from './item/MulSelectButton.vue';
 
+function getLastMonth(date) {
+    return new Date(
+        date.getFullYear(),date.getMonth()-1, date.getDate(), date.getHours(), 
+        date.getMinutes(), date.getSeconds()
+    );
+}
+function getNextMonth(date) {
+    return new Date(
+        date.getFullYear(),date.getMonth()+1, date.getDate(), date.getHours(), 
+        date.getMinutes(), date.getSeconds()
+    );
+}
+function getLastDay(date) {
+    return new Date(
+        date.getFullYear(),date.getMonth(), date.getDate()-1, date.getHours(), 
+        date.getMinutes(), date.getSeconds()
+    );
+}
+function getNextDay(date) {
+    return new Date(
+        date.getFullYear(),date.getMonth(), date.getDate()+1, date.getHours(), 
+        date.getMinutes(), date.getSeconds()
+    );
+}
+
+function getToday() {
+    let date = new Date()
+    return new Date(
+        date.getFullYear(),date.getMonth(), date.getDate()
+    );
+}
 
 </script>
 
@@ -10,9 +41,22 @@ import MulSelectButton from './item/MulSelectButton.vue';
 
 <div class="Menu">
     <div class="Menu-Left">
-        <span class="Menu-Today">今日:{{(new Date()).getFullYear()}}-{{(new Date()).getMonth()+1}}-{{(new Date()).getDate()}}</span>
-        <span class="Menu-Today">
-            <span>《</span><span>&lt;</span>{{(this.$store.state.StartDate).getFullYear()}}-{{(this.$store.state.StartDate).getMonth()+1}}-{{(this.$store.state.StartDate).getDate()}}<span>&gt;</span><span>》</span>
+        <span class="Menu-Today"
+            @click="this.$store.commit('ChangeStartDate', getToday())"
+        > 今日:{{(new Date()).getFullYear()}}-{{(new Date()).getMonth()+1}}-{{(new Date()).getDate()}}
+        </span>
+        <span class="Menu-StartDay">
+            <span
+            @click="this.$store.commit('ChangeStartDate', getLastMonth(this.$store.state.StartDate))"
+            >≪</span><span
+            @click="this.$store.commit('ChangeStartDate', getLastDay(this.$store.state.StartDate))"
+            >&lt;</span>{{(this.$store.state.StartDate).getFullYear()}}-{{
+            (this.$store.state.StartDate).getMonth()+1 > 9 ? (this.$store.state.StartDate).getMonth()+1 : '0' + ((this.$store.state.StartDate).getMonth()+1)}}-{{
+            (this.$store.state.StartDate).getDate() > 9 ? (this.$store.state.StartDate).getDate() : '0' + (this.$store.state.StartDate).getDate()}}<span
+            @click="this.$store.commit('ChangeStartDate', getNextDay(this.$store.state.StartDate))"
+            >&gt;</span><span
+            @click="this.$store.commit('ChangeStartDate', getNextMonth(this.$store.state.StartDate))"
+            >≫</span>
         </span>
         <SelectButton :selections="['半年','月', '半月','周','日']" />
         <MulSelectButton :selections="['进行','结束','废弃']" />
@@ -82,8 +126,29 @@ import MulSelectButton from './item/MulSelectButton.vue';
     border-radius: 0.4em;
     padding-left: 0.5em;
     padding-right: 0.5em;
+    cursor: default;
+    user-select: none;
 }
 
+.Menu-Today:hover {
+    background-color: #cccccc;
+}
+
+.Menu-StartDay {
+    margin-right: 0.5em;
+    font-size: 1.5em;
+    background-color: #eeeeee;
+    padding: 0.2em;
+    border-radius: 0.4em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    cursor: default;
+    user-select: none;
+}
+
+.Menu-StartDay span:hover {
+    background-color: #cccccc;
+}
 
 .Menu-Span{
     display: inline-block;

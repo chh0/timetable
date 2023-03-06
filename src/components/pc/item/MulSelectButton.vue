@@ -39,7 +39,7 @@ export default {
 
 <template>
 
-<span class="Mul-Select-Button">
+<span class="Mul-Select-Button" @click="this.$store.commit('UpdateData')">
     <span v-for="item of selections" :class="displayState[item]" v-on:click="handleClick(item)">{{item}}</span>
 </span>
 
