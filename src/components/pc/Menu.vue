@@ -58,8 +58,11 @@ function getToday() {
             @click="this.$store.commit('ChangeStartDate', getNextMonth(this.$store.state.StartDate))"
             >≫</span>
         </span>
-        <SelectButton :selections="['半年','月', '半月','周','日']" />
-        <MulSelectButton :selections="['进行','结束','废弃']" />
+        <SelectButton :selections="this.$store.state.ViewLengthOptions" />
+        <MulSelectButton :selections="this.$store.state.KindsOptions" />
+        <span 
+        :class="this.$store.state.NoteDisplay ? 'Menu-Note-Clicked' : 'Menu-Note'"
+        @click="this.$store.commit('ChangeNoteDisplay', !(this.$store.state.NoteDisplay))">备注</span>
     </div>
     <div class="Menu-Right">
         <span class="Menu-Span">
@@ -167,6 +170,35 @@ function getToday() {
 .Menu-Icon {
     width: 2em;
     height: 2em;
+}
+
+.Menu-Note {
+    margin-right: 0.5em;
+    font-size: 1.5em;
+    background-color: #eeeeee;
+    padding: 0.2em;
+    border-radius: 0.4em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    cursor: default;
+    user-select: none;
+}
+
+.Menu-Note:hover {
+    background-color: #cccccc;
+}
+
+.Menu-Note-Clicked {
+    margin-right: 0.5em;
+    font-size: 1.5em;
+    color: #ffffff;
+    background-color: #434978;
+    padding: 0.2em;
+    border-radius: 0.4em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    cursor: default;
+    user-select: none;
 }
 
 </style>

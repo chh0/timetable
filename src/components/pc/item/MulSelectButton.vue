@@ -7,7 +7,7 @@ export default {
     data(){
         return {
             selectState:[],
-            displayState:{}
+            displayState:{},
         }
     },
     props: {
@@ -40,7 +40,11 @@ export default {
 <template>
 
 <span class="Mul-Select-Button" @click="this.$store.commit('UpdateData')">
-    <span v-for="item of selections" :class="displayState[item]" v-on:click="handleClick(item)">{{item}}</span>
+    <span v-for="item of selections"
+    :class="displayState[item]"
+    v-on:click="handleClick(item)"
+    :style="{'background-color': selectState.indexOf(item) > -1 ? this.$store.state.StateColors[selections.indexOf(item)] : 'rgba(0,0,0,0)'}"
+    >{{item}}</span>
 </span>
 
 </template>
@@ -78,7 +82,7 @@ export default {
     border-radius: 0.5em;
     margin-left: 0.1em;
     margin-right: 0.1em;
-    background-color: #007700;
+    /* background-color: #007700; */
     color: #ffffff;
 }
 

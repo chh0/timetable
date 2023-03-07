@@ -13,9 +13,11 @@
     <div v-for="item of this.$store.state.SortedData" 
         class="Tasks-Item" 
         :style="{'height':this.$store.state.TaskHeight + 'em',
+                 'border-left': this.$store.state.StateColors[this.$store.state.KindsOptions.indexOf(item.state.kind)] + ' 8px solid'
          }">
-        <div
-        :style="{'padding-top': (this.$store.state.TaskHeight - 1) / 2 + 'em'}"
+        <div :style="{
+            'padding-top': (this.$store.state.TaskHeight - 1) / 2 + 'em',
+            }"
         >{{ item.name }}</div>
     </div>
 </div>
@@ -34,7 +36,7 @@
 }
 
 .Tasks-Item {
-    width: 100%;
+    width: calc(100% - 8px);
     text-align: center;
     background-color: #eeeeee;
     border-bottom: solid #aaaaaa 1px;

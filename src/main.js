@@ -9,13 +9,17 @@ const store = createStore({
   state () {
     return {
       ViewLength: "周",
+      ViewLengthOptions: ['半年','月', '半月','周','日'],
       Kinds: ["进行"],
+      KindsOptions: ['进行','结束','废弃'],
       TasksWindowWidth: 300, // in px
       TaskHeight: 2.5, // in em
       // StartDate: new Date(new Date().setDate(new Date().getDate()-1)),
       StartDate: new Date((new Date).getFullYear(), (new Date).getMonth(), (new Date).getDate()),
       Data: [],
-      SortedData: []
+      SortedData: [],
+      StateColors: ['#00B626', '#41A8FF', '#6E0051'],
+      NoteDisplay: false,
     }
   },
   mutations: {
@@ -29,8 +33,10 @@ const store = createStore({
     UpdateData (state) {
       let res = []
       for ( let i of state.Data ) if ( state.Kinds.indexOf(i.state.kind)>-1 ) res.push(i)
+      res.sort((a,b)=>{return a.state.order - b.state.order})
       state.SortedData = res
-    }
+    },
+    ChangeNoteDisplay (state, value) { state.NoteDisplay = value },
   }
 })
 
@@ -44,7 +50,7 @@ const getData = () => {
       note:'this is just a test',
       state: {
         color:'#DD4714',
-        order: 1,
+        order: 6,
         kind: '结束'
       }
   },
@@ -70,6 +76,33 @@ const getData = () => {
       state: {
         color:'#21FB90',
         order: 3,
+        kind: '进行'
+      }
+  },
+  {
+      id: '2023-3-7-16-0-0',
+      name:'test4',
+      duration:[
+          ['2023-3-7-18-0-0', '2023-3-7-24-0-0'],
+          ['2023-3-8-8-0-0', '2023-3-8-19-0-0']
+      ],
+      note:'this is just a test4',
+      state: {
+        color:'#21FB90',
+        order: 4,
+        kind: '废弃'
+      }
+  },
+  {
+      id: '2023-3-7-0-0-0',
+      name:'期中考试复习',
+      duration:[
+          ['2023-3-7-0-0-0', '2023-4-23-24-0-0'],
+      ],
+      note:'一门在4.23，后面一门在5.6',
+      state: {
+        color:'#1a92b3',
+        order: 1,
         kind: '进行'
       }
   }

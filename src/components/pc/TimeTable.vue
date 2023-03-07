@@ -241,6 +241,15 @@ const setMonthItemColor = (arr) => {
                     'background-color':item2[2]
                  }">
             </div>
+            <div class="TimeTable-Rails-Rail-Note" 
+                v-if="this.$store.state.NoteDisplay"
+                :style="{
+                    'height':this.$store.state.TaskHeight+'em',
+                    'color':'#3f3f3f',
+                    'padding-left': '1em',
+                    'padding-top': 'calc(' + ((this.$store.state.TaskHeight-1)*0.5) + 'em - 1px)'
+                 }"> {{ item.note }}
+            </div>
         </div>
     </div>
 </div>
@@ -307,6 +316,11 @@ const setMonthItemColor = (arr) => {
 }
 
 .TimeTable-Rails-Rail-Item {
+    display: inline-block;
+    position: absolute;
+}
+
+.TimeTable-Rails-Rail-Note {
     display: inline-block;
     position: absolute;
 }
