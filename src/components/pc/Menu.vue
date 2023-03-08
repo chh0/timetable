@@ -62,7 +62,9 @@ function getToday() {
         <MulSelectButton :selections="this.$store.state.KindsOptions" />
         <span 
         :class="this.$store.state.NoteDisplay ? 'Menu-Note-Clicked' : 'Menu-Note'"
-        @click="this.$store.commit('ChangeNoteDisplay', !(this.$store.state.NoteDisplay))">备注</span>
+        @click="
+        this.$store.commit('ChangeNoteDisplay', !(this.$store.state.NoteDisplay));
+        this.$store.commit('UpdateData')">备注</span>
     </div>
     <div class="Menu-Right">
         <span class="Menu-Span">

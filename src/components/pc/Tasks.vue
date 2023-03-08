@@ -44,7 +44,8 @@
 }
 
 .Tasks-Head {
-    width: 100%;
+    width: calc(100% - 8px);
+    border-left: 8px solid #dddddd;
     text-align: center;
     background-color: #dddddd;
     border-bottom: solid #dddddd 1px;
