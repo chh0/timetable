@@ -3,39 +3,39 @@
 import SelectButton from './item/SelectButton.vue';
 import MulSelectButton from './item/MulSelectButton.vue';
 
-function getLastMonth(date) {
+const getLastMonth = (date) => {
     return new Date(
         date.getFullYear(),date.getMonth()-1, date.getDate(), date.getHours(), 
         date.getMinutes(), date.getSeconds()
     );
 }
-function getNextMonth(date) {
+const getNextMonth = (date) => {
     return new Date(
         date.getFullYear(),date.getMonth()+1, date.getDate(), date.getHours(), 
         date.getMinutes(), date.getSeconds()
     );
 }
-function getLastDay(date) {
+const getLastDay = (date) => {
     return new Date(
         date.getFullYear(),date.getMonth(), date.getDate()-1, date.getHours(), 
         date.getMinutes(), date.getSeconds()
     );
 }
-function getNextDay(date) {
+const getNextDay = (date) => {
     return new Date(
         date.getFullYear(),date.getMonth(), date.getDate()+1, date.getHours(), 
         date.getMinutes(), date.getSeconds()
     );
 }
 
-function getToday() {
+const getToday = () => {
     let date = new Date()
     return new Date(
         date.getFullYear(),date.getMonth(), date.getDate()
     );
 }
 
-function print(e) { console.log(e) }
+const print = (e) => { console.log(e) }
 
 </script>
 

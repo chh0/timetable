@@ -2,7 +2,7 @@
 import Pc from './components/Pc.vue'
 import Mobile from './components/Mobile.vue'
 
-function isPC () { return 1 }
+const isPC = () => { return 1 }
 
 </script>
 

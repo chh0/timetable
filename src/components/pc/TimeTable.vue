@@ -48,7 +48,7 @@ const GetMonth = (date) => {
 // }
 
 
-function GetMonthDays(date){
+const GetMonthDays = (date) => {
 	let curDate = new Date(date)
 	curDate.setDate(32);
 	return 32-curDate.getDate();
