@@ -3,6 +3,9 @@
 import SelectButton from './item/SelectButton.vue';
 import MulSelectButton from './item/MulSelectButton.vue';
 
+import { useStore } from 'vuex'
+const store1 = useStore()
+
 const getLastMonth = (date) => {
     return new Date(
         date.getFullYear(),date.getMonth()-1, date.getDate(), date.getHours(), 
@@ -44,46 +47,46 @@ const print = (e) => { console.log(e) }
 <div class="Menu">
     <div class="Menu-Left">
         <span class="Menu-Today"
-            @click="this.$store.commit('ChangeStartDate', getToday())"
+            @click="store1.commit('ChangeStartDate', getToday())"
         > 今日:{{(new Date()).getFullYear()}}-{{(new Date()).getMonth()+1}}-{{(new Date()).getDate()}}
         </span>
         <span class="Menu-StartDay">
             <span
-            @click="this.$store.commit('ChangeStartDate', getLastMonth(this.$store.state.StartDate))"
+            @click="store1.commit('ChangeStartDate', getLastMonth(store1.state.StartDate))"
             >≪</span><span
-            @click="this.$store.commit('ChangeStartDate', getLastDay(this.$store.state.StartDate))"
-            >&lt;</span>{{(this.$store.state.StartDate).getFullYear()}}-{{
-            (this.$store.state.StartDate).getMonth()+1 > 9 ? (this.$store.state.StartDate).getMonth()+1 : '0' + ((this.$store.state.StartDate).getMonth()+1)}}-{{
-            (this.$store.state.StartDate).getDate() > 9 ? (this.$store.state.StartDate).getDate() : '0' + (this.$store.state.StartDate).getDate()}}<span
-            @click="this.$store.commit('ChangeStartDate', getNextDay(this.$store.state.StartDate))"
+            @click="store1.commit('ChangeStartDate', getLastDay(store1.state.StartDate))"
+            >&lt;</span>{{(store1.state.StartDate).getFullYear()}}-{{
+            (store1.state.StartDate).getMonth()+1 > 9 ? (store1.state.StartDate).getMonth()+1 : '0' + ((store1.state.StartDate).getMonth()+1)}}-{{
+            (store1.state.StartDate).getDate() > 9 ? (store1.state.StartDate).getDate() : '0' + (store1.state.StartDate).getDate()}}<span
+            @click="store1.commit('ChangeStartDate', getNextDay(store1.state.StartDate))"
             >&gt;</span><span
-            @click="this.$store.commit('ChangeStartDate', getNextMonth(this.$store.state.StartDate))"
+            @click="store1.commit('ChangeStartDate', getNextMonth(store1.state.StartDate))"
             >≫</span>
         </span>
-        <SelectButton :selections="this.$store.state.ViewLengthOptions" />
-        <MulSelectButton :selections="this.$store.state.KindsOptions" />
+        <SelectButton :selections="store1.state.ViewLengthOptions" />
+        <MulSelectButton :selections="store1.state.KindsOptions" />
         <span 
-        :class="this.$store.state.NoteDisplay ? 'Menu-Note-Clicked' : 'Menu-Note'"
+        :class="store1.state.NoteDisplay ? 'Menu-Note-Clicked' : 'Menu-Note'"
         @click="
-        this.$store.commit('ChangeNoteDisplay', !(this.$store.state.NoteDisplay))">备注</span>
+        store1.commit('ChangeNoteDisplay', !(store1.state.NoteDisplay))">备注</span>
     </div>
     <div class="Menu-Right">
-        <span class="Menu-Span" @click="this.$store.commit('ToAddTask')">
+        <span class="Menu-Span" @click="store1.commit('ToAddTask')">
             <img src="../../assets/svg/新建.svg" class="Menu-Icon Menu-Icon-New" draggable="false" />
         </span>
-        <span class="Menu-Span" @click="!!(this.$store.state.SelectedTask) ? this.$store.commit('ToModTask') : print('No selected yet')">
+        <span class="Menu-Span" @click="!!(store1.state.SelectedTask) ? store1.commit('ToModTask') : print('No selected yet')">
             <img src="../../assets/svg/编辑.svg" class="Menu-Icon Menu-Icon-Edit" draggable="false" />
         </span>
         <!-- <span class="Menu-Span">
             <img src="../../assets/svg/完成.svg" class="Menu-Icon Menu-Icon-Finished" draggable="false" />
         </span> -->
-        <span class="Menu-Span" @click="!!(this.$store.state.SelectedTask) ? this.$store.commit('DelTask') : print('No selected yet')">
+        <span class="Menu-Span" @click="!!(store1.state.SelectedTask) ? store1.commit('DelTask') : print('No selected yet')">
             <img src="../../assets/svg/删除.svg" class="Menu-Icon Menu-Icon-Delete" draggable="false" />
         </span>
-        <span class="Menu-Span" @click="!!(this.$store.state.SelectedTask) ? this.$store.commit('UpMoveTask') : print('No selected yet')">
+        <span class="Menu-Span" @click="!!(store1.state.SelectedTask) ? store1.commit('UpMoveTask') : print('No selected yet')">
             <img src="../../assets/svg/向上.svg" class="Menu-Icon Menu-Icon-Up" draggable="false" />
             </span>
-        <span class="Menu-Span" @click="!!(this.$store.state.SelectedTask) ? this.$store.commit('DownMoveTask') : print('No selected yet')">
+        <span class="Menu-Span" @click="!!(store1.state.SelectedTask) ? store1.commit('DownMoveTask') : print('No selected yet')">
             <img src="../../assets/svg/向下.svg" class="Menu-Icon Menu-Icon-Down" draggable="false" />
         </span>
         </div>

@@ -1,5 +1,7 @@
 <script setup>
-import { SourceNode } from '_source-map@0.6.1@source-map';
+
+import { useStore } from 'vuex'
+const store1 = useStore()
 
 
 const getTimeString = (date) => {
@@ -82,39 +84,39 @@ const print = ( e ) => { console.log(e) }
 
 <template>
 
-<div class="ConfigWin" v-if="this.$store.state.ShowConfigWin">
+<div class="ConfigWin" v-if="store1.state.ShowConfigWin">
     <div class="ConfigWin-Win">
         <div class="ConfigWin-Win-CloseFit">
             <div class="ConfigWin-Win-Close"
-                @click="this.$store.commit('ChangeShowConfigWin', false)">×</div>
+                @click="store1.commit('ChangeShowConfigWin', false)">×</div>
         </div>
         <div class="ConfigWin-Win-Content">
             <div class="ConfigWin-Win-Content-Item ConfigWin-Win-Content-Item-ID">
                 <span>项目ID: </span>
-                <span>{{ this.$store.state.Task0.id }}</span>
+                <span>{{ store1.state.Task0.id }}</span>
             </div>
             <div class="ConfigWin-Win-Content-Item">
                 <div>项目名称</div>
                 <input type="text"
-                :value="this.$store.state.Task0.name"
-                @change="this.$store.commit('ChangeTask0', ChangeTask(this.$store.state.Task0, 'name', '', '', $event.currentTarget.value))" />
+                :value="store1.state.Task0.name"
+                @change="store1.commit('ChangeTask0', ChangeTask(store1.state.Task0, 'name', '', '', $event.currentTarget.value))" />
             </div>
             <div class="ConfigWin-Win-Content-Item"><!--  @load="this.$refs.a.value='2023-03-08T10:41'" -->
                 <div>持续时间</div> 
                 <div>
-                    <div v-for="i in Array.from(Array(this.$store.state.Task0.duration.length), (v,k) =>k)">
+                    <div v-for="i in Array.from(Array(store1.state.Task0.duration.length), (v,k) =>k)">
                         <div class="ConfigWin-Win-Content-Item-Duration-Drop-Empty">-</div>
                         <input type="datetime-local" 
-                        :value="getTimeString(TimeStrToDate(this.$store.state.Task0.duration[i][0]))"
-                        @change="this.$store.commit('ChangeTask0', ChangeTask(this.$store.state.Task0, 'duration', i, 0, StringToMyStr($event.currentTarget.value)))" />
+                        :value="getTimeString(TimeStrToDate(store1.state.Task0.duration[i][0]))"
+                        @change="store1.commit('ChangeTask0', ChangeTask(store1.state.Task0, 'duration', i, 0, StringToMyStr($event.currentTarget.value)))" />
                         <span> - </span>
                         <input type="datetime-local"
-                        :value="getTimeString(TimeStrToDate(this.$store.state.Task0.duration[i][1]))"
-                        @change="this.$store.commit('ChangeTask0', ChangeTask(this.$store.state.Task0, 'duration', i, 1, StringToMyStr($event.currentTarget.value)))" />
+                        :value="getTimeString(TimeStrToDate(store1.state.Task0.duration[i][1]))"
+                        @change="store1.commit('ChangeTask0', ChangeTask(store1.state.Task0, 'duration', i, 1, StringToMyStr($event.currentTarget.value)))" />
                         <div :style="{'display':'inline'}">
                             <div v-if="i > 0"
                                 class="ConfigWin-Win-Content-Item-Duration-Drop"
-                                @click="this.$store.commit('ChangeTask0', DropTaskDuration(this.$store.state.Task0, i))"
+                                @click="store1.commit('ChangeTask0', DropTaskDuration(store1.state.Task0, i))"
                                 >-</div>
                             <div v-else class="ConfigWin-Win-Content-Item-Duration-Drop-Empty">-</div>
                         </div>
@@ -122,7 +124,7 @@ const print = ( e ) => { console.log(e) }
                     <div>
                     <div
                         class="ConfigWin-Win-Content-Item-Duration-Add"
-                        @click="this.$store.commit('ChangeTask0', AddTaskDuration(this.$store.state.Task0))"
+                        @click="store1.commit('ChangeTask0', AddTaskDuration(store1.state.Task0))"
                         >+</div>
                     </div>
                 </div>
@@ -131,37 +133,37 @@ const print = ( e ) => { console.log(e) }
                 <div>备注信息</div>
                 <div>
                     <input type="text"
-                    :value="this.$store.state.Task0.note"
-                    @change="this.$store.commit('ChangeTask0', ChangeTask(this.$store.state.Task0, 'note', '', '', $event.currentTarget.value))" />
+                    :value="store1.state.Task0.note"
+                    @change="store1.commit('ChangeTask0', ChangeTask(store1.state.Task0, 'note', '', '', $event.currentTarget.value))" />
                 </div>
             </div>
             <div class="ConfigWin-Win-Content-Item">
                 <div>显示颜色</div>
                 <div class="ConfigWin-Win-Content-Item-Color">
                     <input type="color" class="ConfigWin-Win-Content-Item-Color-Box"
-                    :value="this.$store.state.Task0.state.color"
-                    @change="this.$store.commit('ChangeTask0', ChangeTask(this.$store.state.Task0, 'state', 'color', '', $event.currentTarget.value))" />
+                    :value="store1.state.Task0.state.color"
+                    @change="store1.commit('ChangeTask0', ChangeTask(store1.state.Task0, 'state', 'color', '', $event.currentTarget.value))" />
                     <div class="ConfigWin-Win-Content-Item-Color-Value"
-                    >{{'当前颜色值：' + this.$store.state.Task0.state.color }}</div>
+                    >{{'当前颜色值：' + store1.state.Task0.state.color }}</div>
                 </div>
             </div>
             <div class="ConfigWin-Win-Content-Item">
                 <div class="ConfigWin-Win-Content-Item-State-Text">目前状态</div>
                     <div class="ConfigWin-Win-Content-Item-State">
-                        <span :class=" this.$store.state.Task0.state.kind === '进行' ? 'ConfigWin-Win-Content-Item-State-Selection-Selected' : 'ConfigWin-Win-Content-Item-State-Selection'"
-                        @click="this.$store.commit('ChangeTask0', ChangeTask(this.$store.state.Task0, 'state', 'kind', '', '进行'))"
+                        <span :class=" store1.state.Task0.state.kind === '进行' ? 'ConfigWin-Win-Content-Item-State-Selection-Selected' : 'ConfigWin-Win-Content-Item-State-Selection'"
+                        @click="store1.commit('ChangeTask0', ChangeTask(store1.state.Task0, 'state', 'kind', '', '进行'))"
                         >进行</span>
-                        <span :class=" this.$store.state.Task0.state.kind === '结束' ? 'ConfigWin-Win-Content-Item-State-Selection-Selected' : 'ConfigWin-Win-Content-Item-State-Selection'"
-                        @click="this.$store.commit('ChangeTask0', ChangeTask(this.$store.state.Task0, 'state', 'kind', '', '结束'))"
+                        <span :class=" store1.state.Task0.state.kind === '结束' ? 'ConfigWin-Win-Content-Item-State-Selection-Selected' : 'ConfigWin-Win-Content-Item-State-Selection'"
+                        @click="store1.commit('ChangeTask0', ChangeTask(store1.state.Task0, 'state', 'kind', '', '结束'))"
                         >结束</span>
-                        <span :class=" this.$store.state.Task0.state.kind === '废弃' ? 'ConfigWin-Win-Content-Item-State-Selection-Selected' : 'ConfigWin-Win-Content-Item-State-Selection'"
-                        @click="this.$store.commit('ChangeTask0', ChangeTask(this.$store.state.Task0, 'state', 'kind', '', '废弃'))"
+                        <span :class=" store1.state.Task0.state.kind === '废弃' ? 'ConfigWin-Win-Content-Item-State-Selection-Selected' : 'ConfigWin-Win-Content-Item-State-Selection'"
+                        @click="store1.commit('ChangeTask0', ChangeTask(store1.state.Task0, 'state', 'kind', '', '废弃'))"
                         >废弃</span>
                     </div>
             </div>
             <div class="ConfigWin-Win-Content-Item">
                 <div class="ConfigWin-Win-Content-Item-Submit"
-                @click="this.$store.state.Task0State === 'new' ? this.$store.commit('AddTask') : this.$store.commit('ModifyTask')">提交</div>
+                @click="store1.state.Task0State === 'new' ? store1.commit('AddTask') : store1.commit('ModifyTask')">提交</div>
             </div>
         </div>
     </div>

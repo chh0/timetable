@@ -1,5 +1,7 @@
 <script setup>
 
+import { useStore } from 'vuex'
+const store1 = useStore()
 // const GetThisWeek = (date) => { 
 //     return [
 //         new Date(new Date().setDate(date.getDate() - date.getDay())),
@@ -169,45 +171,45 @@ const setMonthItemColor = (arr) => {
 <template>
 
 <div class="TimeTable" :style="{
-    'left': this.$store.state.TasksWindowWidth + 'px',
-    'width': 'calc(100% - ' + this.$store.state.TasksWindowWidth + 'px)'
+    'left': store1.state.TasksWindowWidth + 'px',
+    'width': 'calc(100% - ' + store1.state.TasksWindowWidth + 'px)'
 }">
     <div class="TimeTable-Head"
-         :style="{'padding-top': (this.$store.state.TaskHeight - 1) / 2 + 'em'}">
-        <div class="TimeTable-Head-Content" v-if="this.$store.state.ViewLength === '日'">
+         :style="{'padding-top': (store1.state.TaskHeight - 1) / 2 + 'em'}">
+        <div class="TimeTable-Head-Content" v-if="store1.state.ViewLength === '日'">
             <div v-for="i in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]"
                   class="TimeTable-HeadItem TimeTable-Head-DateItem"
                   :style="{'background-color':setHourItemColor(i)}">
                 {{ i }}
                 </div>
         </div>
-        <div class="TimeTable-Head-Content" v-else-if="this.$store.state.ViewLength === '周'">
-            <div v-for="i in GetThisWeek(this.$store.state.StartDate)"
+        <div class="TimeTable-Head-Content" v-else-if="store1.state.ViewLength === '周'">
+            <div v-for="i in GetThisWeek(store1.state.StartDate)"
                   class="TimeTable-HeadItem TimeTable-Head-WeekItem"
                   :style="{'background-color':setDayItemColor(i)}">
                   {{ i.getMonth()+1 }}-{{ i.getDate() }}
                 </div>
         </div>
-        <div class="TimeTable-Head-Content" v-else-if="this.$store.state.ViewLength === '半月'">
-            <!-- {{ GetHalfMonth(this.$store.state.StartDate) }} -->
-            <div v-for="i in GetHalfMonth(this.$store.state.StartDate)"
+        <div class="TimeTable-Head-Content" v-else-if="store1.state.ViewLength === '半月'">
+            <!-- {{ GetHalfMonth(store1.state.StartDate) }} -->
+            <div v-for="i in GetHalfMonth(store1.state.StartDate)"
                   class="TimeTable-HeadItem TimeTable-Head-HelfMonthItem"
                   :style="{'background-color':setDayItemColor(i)}">
                   {{ i.getMonth()+1 }}-{{ i.getDate() }}
                 </div>
         </div>
-        <div class="TimeTable-Head-Content" v-else-if="this.$store.state.ViewLength === '月'">
-            <!-- {{ GetMonthDays(this.$store.state.StartDate) }} -->
-            <!-- :style="{'width':'calc(100% / ' + (GetMonthDays(this.$store.state.StartDate)) + ' - 1px)'}" -->
-            <div v-for="i in GetMonth(this.$store.state.StartDate)"
+        <div class="TimeTable-Head-Content" v-else-if="store1.state.ViewLength === '月'">
+            <!-- {{ GetMonthDays(store1.state.StartDate) }} -->
+            <!-- :style="{'width':'calc(100% / ' + (GetMonthDays(store1.state.StartDate)) + ' - 1px)'}" -->
+            <div v-for="i in GetMonth(store1.state.StartDate)"
                   class="TimeTable-HeadItem TimeTable-Head-MonthItem"
                   :style="{'background-color':setDayItemColor(i)}">
                   {{ i.getDate() }}
                 </div>
         </div>
-        <div class="TimeTable-Head-Content" v-else-if="this.$store.state.ViewLength === '半年'">
-            <!-- {{ GetHalfYearMonthList(this.$store.state.StartDate) }} -->
-            <div v-for="i in GetHalfYearMonthList(this.$store.state.StartDate)"
+        <div class="TimeTable-Head-Content" v-else-if="store1.state.ViewLength === '半年'">
+            <!-- {{ GetHalfYearMonthList(store1.state.StartDate) }} -->
+            <div v-for="i in GetHalfYearMonthList(store1.state.StartDate)"
                   class="TimeTable-HeadItem TimeTable-Head-HalfYearItem"
                   :style="{
                     'width':'calc(100% *' + i[1]/180 + ' - 1px )',
@@ -221,32 +223,32 @@ const setMonthItemColor = (arr) => {
 
     <div class="TimeTable-Rails"
          :style="{
-            'top':'calc(' + (this.$store.state.TaskHeight*1.5-0.5) + 'em + 1px)',
+            'top':'calc(' + (store1.state.TaskHeight*1.5-0.5) + 'em + 1px)',
             }">
-        <div v-for="item in this.$store.state.SortedData"
+        <div v-for="item in store1.state.SortedData"
              class="TimeTable-Rails-Rail"
              :style="{
-                'height': this.$store.state.TaskHeight + 'em',
+                'height': store1.state.TaskHeight + 'em',
              }">
-            <!-- {{ CalcRailItemPos(this.$store.state.ViewLength, this.$store.state.StartDate, item) }} -->
+            <!-- {{ CalcRailItemPos(store1.state.ViewLength, store1.state.StartDate, item) }} -->
             <!-- {{ item.duration }} -->
-            <!-- {{ this.$store.state.StartDate.getMonth() }} -->
+            <!-- {{ store1.state.StartDate.getMonth() }} -->
             <div class="TimeTable-Rails-Rail-Item" 
-                 v-for="item2 in CalcRailItemPosAndColor(this.$store.state.ViewLength, this.$store.state.StartDate, item)"
+                 v-for="item2 in CalcRailItemPosAndColor(store1.state.ViewLength, store1.state.StartDate, item)"
                  :style="{
                     'left':item2[0]+'%',
                     'width':item2[1]+'%',
-                    'height':this.$store.state.TaskHeight+'em',
+                    'height':store1.state.TaskHeight+'em',
                     'background-color':item2[2]
                  }">
             </div>
             <div class="TimeTable-Rails-Rail-Note" 
-                v-if="this.$store.state.NoteDisplay"
+                v-if="store1.state.NoteDisplay"
                 :style="{
-                    'height':this.$store.state.TaskHeight+'em',
+                    'height':store1.state.TaskHeight+'em',
                     'color':'#3f3f3f',
                     'padding-left': '1em',
-                    'padding-top': 'calc(' + ((this.$store.state.TaskHeight-1)*0.5) + 'em - 1px)'
+                    'padding-top': 'calc(' + ((store1.state.TaskHeight-1)*0.5) + 'em - 1px)'
                  }"> {{ item.note }}
             </div>
         </div>
