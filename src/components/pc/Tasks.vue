@@ -11,10 +11,11 @@
         <div> 任务列表 </div>
     </div>
     <div v-for="item of this.$store.state.SortedData" 
-        class="Tasks-Item" 
+        :class=" this.$store.state.SelectedTask === item.id ? 'Tasks-Item-Selected' : 'Tasks-Item' " 
         :style="{'height':this.$store.state.TaskHeight + 'em',
                  'border-left': this.$store.state.StateColors[this.$store.state.KindsOptions.indexOf(item.state.kind)] + ' 8px solid'
-         }">
+         }"
+         @click="this.$store.state.SelectedTask === item.id ? this.$store.commit('ChangeSelectedTask', '') : this.$store.commit('ChangeSelectedTask', item.id)">
         <div :style="{
             'padding-top': (this.$store.state.TaskHeight - 1) / 2 + 'em',
             }"
@@ -33,12 +34,21 @@
     background-color: #eeeeee;
     box-shadow: 0.1em 0 0.3em 0 #cccccc;
     height: 100%;
+    user-select: none;
 }
 
 .Tasks-Item {
     width: calc(100% - 8px);
     text-align: center;
     background-color: #eeeeee;
+    border-bottom: solid #aaaaaa 1px;
+    transition: 0.3s;
+}
+
+.Tasks-Item-Selected {
+    width: calc(100% - 8px);
+    text-align: center;
+    background-color: #bbbbbb;
     border-bottom: solid #aaaaaa 1px;
     transition: 0.3s;
 }

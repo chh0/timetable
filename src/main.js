@@ -124,6 +124,23 @@ const getData = () => {
   }
 ]}
 
+const MyDateToString = (date) => {
+  return ('' + date.getFullYear() + '-' +
+  (date.getMonth()+1) + '-' +
+  date.getDate() + '-' +
+  date.getHours() + '-' +
+  date.getMinutes() + '-' +
+  date.getSeconds() )
+}
+
+const Update = () => {
+  store.commit('UpdateData')
+}
+
+const SortData = () => {
+  store.commit('SortData')
+}
+
 // 创建一个新的 store 实例
 const store = createStore({
   state () {
@@ -139,8 +156,12 @@ const store = createStore({
       Data: [],
       SortedData: [],
       StateColors: ['#00B626', '#41A8FF', '#6E0051'],
+      SelectedTask: '',
+      Task0: {},
+      Task0State: 'new', // or 'modify'
+      ShowConfigWin: false,
       NoteDisplay: false,
-      Debug: false
+      Debug: false,
     }
   },
   mutations: {
@@ -150,6 +171,7 @@ const store = createStore({
     ChangeTaskHeight (state, value) { state.TaskHeight = value },
     ChangeStartDate (state, value) { state.StartDate = value },
     ChangeData (state, value) { state.Data = value },
+    ChangeShowConfigWin (state, value) { state.ShowConfigWin = value },
     // ChangeSortedData (state, value) { state.SortedData = value },
     SortData (state) {
       let res = []
@@ -158,18 +180,154 @@ const store = createStore({
       state.SortedData = res
     },
     ChangeNoteDisplay (state, value) { state.NoteDisplay = value },
+    ChangeSelectedTask (state, value) { state.SelectedTask = value},
+    ChangeTask0 (state, value) { state.Task0 = value},
+    ToAddTask (state) {
+      state.Task0State = 'new'
+      state.Task0 = {
+        id: '' + MyDateToString(new Date),
+        name:'',
+        duration:[[
+          MyDateToString(new Date),
+          MyDateToString(new Date(new Date - 0 + 86400000))
+        ]],
+        note:'',
+        state: {
+          color:'#123499',
+          order: 0,
+          kind: '进行'
+        }
+      }
+      let maxorder = 0
+      for (let t of state.Data) {
+        if ( t.state.order > maxorder ) maxorder = t.state.order
+      }
+      state.Task0.state.order = maxorder + 1
+      state.ShowConfigWin = true
+      state.SelectedTask = ''
+    },
+    ToModTask (state) {
+      state.Task0State = 'modify'
+      let temp = {}
+      for ( let i of state.SortedData ) {
+        if ( i.id === state.SelectedTask) {
+          temp = i
+          break
+        }
+      }
+      if (temp.id) {
+        state.Task0 = JSON.parse(JSON.stringify(temp))
+        state.ShowConfigWin = true
+      } else {
+        console.log("ERR: id not find!")
+      }
+    },
+    AddTask (state) { 
+      if ( !state.Task0.name || !state.Task0.note ) {}
+      else {
+        state.Data.push(state.Task0)
+        state.ShowConfigWin = false
+        Update()
+      }
+     },
+     ModifyTask (state) { 
+       let temp = -1
+       for ( let i of state.SortedData ) {
+         if ( i.id === state.SelectedTask) {
+           temp = state.Data.indexOf(i)
+           break
+         }
+       }
+       if (temp>0) {
+         state.Data.splice(temp, 1)
+         state.Data.push(state.Task0)
+         state.ShowConfigWin = false
+         Update()
+       } else {
+         console.log("ERR: id not find![2]")
+       }
+     },
+     UpMoveTask (state) { 
+      if(store.state.SelectedTask){
+        let last = {}
+        let temp = {}
+        for ( let i of state.SortedData ) {
+          if ( i.id === state.SelectedTask) {
+            temp = i
+            break
+          }
+          last = i
+        }
+        if (last.id) {
+          let o = 0
+          o = last.state.order
+          last.state.order = temp.state.order
+          temp.state.order = o
+          Update()
+        } else {
+          console.log('Already the first')
+        }
+        
+      } else {
+        console.log('No selected yet[0]')
+      }
+     },
+     DownMoveTask (state) { 
+      if(store.state.SelectedTask){
+        let last = {}
+        let temp = {}
+        for ( let i of state.SortedData ) {
+          if (last.id && last.id === state.SelectedTask) {
+            temp = i
+            break
+          }
+          last = i
+        }
+        if (temp.id) {
+          let o = 0
+          o = last.state.order
+          last.state.order = temp.state.order
+          temp.state.order = o
+          Update()
+        } else {
+          console.log('Already the last')
+        }
+        
+      } else {
+        console.log('No selected yet[0]')
+      }
+     },
+     DelTask (state) { 
+      if(store.state.SelectedTask){
+        let temp = {}
+        for ( let i of state.SortedData ) {
+          if (i.id === state.SelectedTask) {
+            temp = i
+            break
+          }
+        }
+        if (temp.id) {
+          let index = state.Data.indexOf(temp)
+          // console.log(index)
+          state.Data.splice(index, 1)
+          Update()
+        }
+        
+      } else {
+        console.log('No selected yet[0]')
+      }
+     },
+    
     GetData (state){
       if (state.Debug) {
         state.Data = getData()
-        let arr = state.Data.sort((a,b)=>{return a.state.order - b.state.order})
-        state.SortedData = arr
+        SortData()
         return
       }
       axios.get('http://127.0.0.1:3000/get', {})
         .then( (res) => {
           state.Data = Array(res.data)[0]
-          let arr = state.Data.sort((a,b)=>{return a.state.order - b.state.order})
-          state.SortedData = arr
+          SortData()
           console.log(state.Data)
         })
         .catch( (err) => console.log(err) )
@@ -180,8 +338,7 @@ const store = createStore({
       .then( (res) => {
         console.log(res.data)
         state.Data = res.data
-        let arr = state.Data.sort((a,b)=>{return a.state.order - b.state.order})
-        state.SortedData = arr
+        SortData()
       } )
       .catch( (err) => console.log(err) );
     }

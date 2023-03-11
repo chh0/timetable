@@ -3,6 +3,7 @@
 import Menu from './pc/Menu.vue'
 import Tasks from './pc/Tasks.vue'
 import TimeTable from './pc/TimeTable.vue'
+import ConfigWin from './pc/ConfigWin.vue'
 
 </script>
 
@@ -13,6 +14,8 @@ import TimeTable from './pc/TimeTable.vue'
 <Tasks />
 
 <Menu />
+
+<ConfigWin />
 
 </template>
 

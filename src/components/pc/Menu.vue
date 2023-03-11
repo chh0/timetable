@@ -35,6 +35,8 @@ function getToday() {
     );
 }
 
+function print(e) { console.log(e) }
+
 </script>
 
 <template>
@@ -63,26 +65,25 @@ function getToday() {
         <span 
         :class="this.$store.state.NoteDisplay ? 'Menu-Note-Clicked' : 'Menu-Note'"
         @click="
-        this.$store.commit('ChangeNoteDisplay', !(this.$store.state.NoteDisplay));
-        this.$store.commit('UpdateData')">备注</span>
+        this.$store.commit('ChangeNoteDisplay', !(this.$store.state.NoteDisplay))">备注</span>
     </div>
     <div class="Menu-Right">
-        <span class="Menu-Span">
+        <span class="Menu-Span" @click="this.$store.commit('ToAddTask')">
             <img src="../../assets/svg/新建.svg" class="Menu-Icon Menu-Icon-New" draggable="false" />
         </span>
-        <span class="Menu-Span">
+        <span class="Menu-Span" @click="!!(this.$store.state.SelectedTask) ? this.$store.commit('ToModTask') : print('No selected yet')">
             <img src="../../assets/svg/编辑.svg" class="Menu-Icon Menu-Icon-Edit" draggable="false" />
         </span>
-        <span class="Menu-Span">
+        <!-- <span class="Menu-Span">
             <img src="../../assets/svg/完成.svg" class="Menu-Icon Menu-Icon-Finished" draggable="false" />
-        </span>
-        <span class="Menu-Span">
+        </span> -->
+        <span class="Menu-Span" @click="!!(this.$store.state.SelectedTask) ? this.$store.commit('DelTask') : print('No selected yet')">
             <img src="../../assets/svg/删除.svg" class="Menu-Icon Menu-Icon-Delete" draggable="false" />
         </span>
-        <span class="Menu-Span">
+        <span class="Menu-Span" @click="!!(this.$store.state.SelectedTask) ? this.$store.commit('UpMoveTask') : print('No selected yet')">
             <img src="../../assets/svg/向上.svg" class="Menu-Icon Menu-Icon-Up" draggable="false" />
             </span>
-        <span class="Menu-Span">
+        <span class="Menu-Span" @click="!!(this.$store.state.SelectedTask) ? this.$store.commit('DownMoveTask') : print('No selected yet')">
             <img src="../../assets/svg/向下.svg" class="Menu-Icon Menu-Icon-Down" draggable="false" />
         </span>
         </div>
