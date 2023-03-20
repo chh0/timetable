@@ -31,7 +31,9 @@ export default {
     mounted(){
         for (let i of this.selections) this.displayState[i] = "Mul-Select-Item"
         this.displayState[this.selections[0]] = "Mul-Select-Item-Clicked"
-        this.selectState.push(this.selections[0])
+        this.displayState[this.selections[1]] = "Mul-Select-Item-Clicked"
+        this.displayState[this.selections[2]] = "Mul-Select-Item-Clicked"
+        this.selectState = this.selections
     }
 }
 

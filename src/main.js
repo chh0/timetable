@@ -147,7 +147,7 @@ const store = createStore({
     return {
       ViewLength: "周",
       ViewLengthOptions: ['半年','月', '半月','周','日'],
-      Kinds: ["进行"],
+      Kinds: ['进行','结束','废弃'],
       KindsOptions: ['进行','结束','废弃'],
       TasksWindowWidth: 300, // in px
       TaskHeight: 2.5, // in em
@@ -324,7 +324,7 @@ const store = createStore({
         SortData()
         return
       }
-      axios.get('http://127.0.0.1:3000/get', {})
+      axios.get('http://116.62.190.165:3000/get', {})
         .then( (res) => {
           state.Data = Array(res.data)[0]
           SortData()
@@ -334,7 +334,7 @@ const store = createStore({
     },
     UpdateData (state) {
       if (state.Debug) return
-      axios.post('http://127.0.0.1:3000/up', state.Data )
+      axios.post('http://116.62.190.165:3000/up', state.Data )
       .then( (res) => {
         console.log(res.data)
         state.Data = res.data
